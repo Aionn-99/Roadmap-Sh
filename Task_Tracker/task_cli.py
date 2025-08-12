@@ -44,12 +44,21 @@ def list_tasks(status_filter=None):
 
 def mark_status(task_id, new_status):
     tasks = load_tasks()
+    task_found = False
+
     for t in tasks:
         if t["id"] == task_id:
             t["status"] = new_status
             t["updatedAt"] = datetime.now().isoformat()
             save_tasks(tasks)
-            print(f"Task {task_id} tidak ditemukan.")
+            task_found = True
+            break
+    
+    if task_found:
+        save_tasks(tasks)
+        print(f"Task {task_id} diperbarui menjadi {new_status}.")
+    else:
+        print(f"Task {task_id} tidak ditemukan.")
 
 
 if len(sys.argv) < 2:
